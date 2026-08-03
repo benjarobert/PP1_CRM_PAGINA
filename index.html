@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>CRM Auto — El CRM que vende autos por vos</title>
+<meta name="description" content="CRM para concesionarios: gestión de leads, stock en tiempo real, chatbot con IA 24/7 y cotizador de usados integrado." />
+<style>
+  :root{
+    --bg:#0e0d0b;
+    --bg-2:#151310;
+    --panel:#1a1714;
+    --panel-2:#221e19;
+    --line:rgba(239,234,224,.08);
+    --line-2:rgba(239,234,224,.14);
+    --text:#efeae0;
+    --muted:#8a8175;
+    --ink:#e6dfd1;
+    --amber:#e8a04a;
+    --rust:#d8552a;
+    --moss:#7a8f5c;
+    --cream:#f5efe4;
+    --radius:10px;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0;padding:0;
+    font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background:var(--bg);
+    color:var(--text);
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+  .serif{font-family: "Georgia", "Playfair Display", "Times New Roman", serif; font-weight:400; letter-spacing:-.5px}
+  a{color:inherit;text-decoration:none}
+  ::selection{background:var(--rust);color:var(--cream)}
+  .container{max-width:1200px;margin:0 auto;padding:0 28px}
+  section{scroll-margin-top:90px}
+
+  /* NAV */
+  header.nav{
+    position:sticky;top:0;z-index:50;
+    background:rgba(14,13,11,.82);
+    backdrop-filter:blur(14px);
+    border-bottom:1px solid var(--line);
+  }
+  .nav-inner{display:flex;align-items:center;justify-content:space-between;height:72px}
+  .logo{display:flex;align-items:center;gap:12px;font-weight:600;font-size:15px}
+  .logo-mark{
+    width:34px;height:34px;border-radius:8px;
+    background:var(--amber);
+    color:#0e0d0b;
+    display:grid;place-items:center;
+    font-weight:800;font-size:16px;
+    font-family:Georgia,serif;
+  }
+  nav ul{display:flex;gap:32px;list-style:none;margin:0;padding:0}
+  nav a{color:var(--muted);font-size:14px;transition:color .18s}
+  nav a:hover{color:var(--amber)}
+  .btn{
+    display:inline-flex;align-items:center;gap:8px;
+    padding:12px 22px;border-radius:999px;
+    font-weight:500;font-size:14px;cursor:pointer;border:0;
+    transition:transform .12s, background .2s, border-color .2s;
+    text-decoration:none;
+  }
+  .btn-primary{background:var(--amber);color:#0e0d0b}
+  .btn-primary:hover{background:#f0b062;transform:translateY(-1px)}
+  .btn-ghost{background:transparent;color:var(--text);border:1px solid var(--line-2)}
+  .btn-ghost:hover{border-color:var(--amber);color:var(--amber)}
+
+  /* HERO */
+  .hero{padding:80px 0 60px;position:relative;overflow:hidden}
+  .hero::before{
+    content:"";position:absolute;top:-100px;right:-200px;
+    width:600px;height:600px;border-radius:50%;
+    background:radial-gradient(circle, rgba(232,160,74,.10), transparent 65%);
+    pointer-events:none;
+  }
+  .hero-grid{display:grid;grid-template-columns:1.4fr .9fr;gap:80px;align-items:end}
+  .eyebrow{
+    display:inline-block;font-size:12px;letter-spacing:2.5px;text-transform:uppercase;
+    color:var(--amber);font-weight:600;margin-bottom:28px;
+  }
+  .eyebrow::before{content:"— ";opacity:.7}
+  h1{
+    font-family:Georgia,"Times New Roman",serif;
+    font-size:clamp(42px,6.5vw,84px);
+    line-height:1;letter-spacing:-1.5px;
+    margin:0 0 28px;font-weight:400;
+  }
+  h1 em{font-style:italic;color:var(--amber);font-weight:400}
+  .lede{color:var(--ink);font-size:18px;max-width:520px;margin:0 0 36px;line-height:1.65}
+  .lede strong{color:var(--text);font-weight:600}
+  .cta-row{display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+  .trust{
+    margin-top:44px;padding-top:28px;
+    border-top:1px solid var(--line);
+    display:flex;gap:36px;color:var(--muted);font-size:13px;flex-wrap:wrap;
+  }
+  .trust b{color:var(--text);font-weight:600;display:block;font-size:20px;font-family:Georgia,serif}
+
+  /* HERO VISUAL — reordenado, más asimétrico */
+  .hero-visual{position:relative}
+  .mock{
+    background:var(--panel);
+    border:1px solid var(--line-2);border-radius:14px;
+    padding:20px;
+    box-shadow:0 40px 80px -20px rgba(0,0,0,.6), 0 0 0 1px rgba(0,0,0,.4);
+    transform:rotate(-1.2deg);
+  }
+  .mock-header{display:flex;align-items:center;gap:6px;margin-bottom:18px;padding-bottom:14px;border-bottom:1px solid var(--line)}
+  .mock-header i{width:9px;height:9px;border-radius:50%;background:#3a342d;display:block}
+  .mock-title{margin-left:12px;color:var(--muted);font-size:11px;font-family:"SF Mono",Menlo,monospace}
+  .kpi-row{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px}
+  .kpi{background:var(--panel-2);border-radius:8px;padding:12px}
+  .kpi .label{color:var(--muted);font-size:10px;text-transform:uppercase;letter-spacing:.8px}
+  .kpi .value{font-size:24px;font-weight:400;margin-top:4px;font-family:Georgia,serif}
+  .kpi .delta{font-size:11px;color:var(--moss);margin-top:2px;font-weight:500}
+  .lead-list{display:flex;flex-direction:column;gap:6px}
+  .lead{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:10px 12px;border-radius:8px;background:var(--panel-2);font-size:13px;
+  }
+  .lead .who{display:flex;align-items:center;gap:10px}
+  .avatar{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;font-size:11px;font-weight:700;color:#0e0d0b;font-family:Georgia,serif}
+  .a1{background:var(--amber)} .a2{background:var(--moss)} .a3{background:var(--rust)}
+  .pill{font-size:10px;padding:3px 9px;border-radius:999px;font-weight:600;letter-spacing:.4px;text-transform:uppercase}
+  .pill.new{background:rgba(122,143,92,.15);color:var(--moss);border:1px solid rgba(122,143,92,.3)}
+  .pill.hot{background:rgba(216,85,42,.15);color:var(--rust);border:1px solid rgba(216,85,42,.3)}
+  .pill.ai{background:rgba(232,160,74,.15);color:var(--amber);border:1px solid rgba(232,160,74,.3)}
+
+  /* SECCIÓN GENÉRICA */
+  section.padded{padding:100px 0}
+  .section-head{max-width:680px;margin:0 0 64px}
+  .section-head.center{margin-left:auto;margin-right:auto;text-align:center}
+  .section-head h2{font-family:Georgia,serif;font-size:clamp(30px,4vw,48px);margin:14px 0 16px;letter-spacing:-.8px;font-weight:400;line-height:1.1}
+  .section-head h2 em{color:var(--amber);font-style:italic}
+  .section-head p{color:var(--muted);font-size:17px;margin:0}
+
+  /* FEATURES — bento */
+  .bento{display:grid;grid-template-columns:repeat(6,1fr);gap:16px}
+  .card{
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-radius:16px;padding:28px;
+    position:relative;overflow:hidden;
+    transition:border-color .2s, transform .2s;
+  }
+  .card:hover{border-color:var(--line-2);transform:translateY(-3px)}
+  .card.big{grid-column:span 3}
+  .card.small{grid-column:span 2}
+  .card .icon{
+    display:inline-grid;place-items:center;
+    width:42px;height:42px;border-radius:10px;
+    background:rgba(232,160,74,.10);
+    color:var(--amber);
+    margin-bottom:18px;
+  }
+  .card h3{margin:0 0 8px;font-size:19px;font-weight:600;letter-spacing:-.2px}
+  .card p{color:var(--muted);margin:0;font-size:14.5px;line-height:1.55}
+  .card.big h3{font-size:22px}
+  .card.feature-primary{
+    background:linear-gradient(135deg,#2a1f14, #1a1714);
+    border-color:rgba(232,160,74,.25);
+  }
+  .card.feature-primary .icon{background:rgba(232,160,74,.18)}
+
+  /* HOW IT WORKS — timeline */
+  .how{background:var(--bg-2);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+  .timeline{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:start}
+  .timeline-list{list-style:none;padding:0;margin:0;position:relative}
+  .timeline-list::before{
+    content:"";position:absolute;left:20px;top:20px;bottom:20px;
+    width:1px;background:linear-gradient(180deg,var(--amber),transparent);
+  }
+  .timeline-list li{position:relative;padding:0 0 34px 60px}
+  .timeline-list li:last-child{padding-bottom:0}
+  .timeline-list li .num{
+    position:absolute;left:0;top:-4px;
+    width:42px;height:42px;border-radius:50%;
+    background:var(--panel);
+    border:1px solid var(--line-2);
+    color:var(--amber);
+    font-family:Georgia,serif;font-size:16px;font-weight:600;
+    display:grid;place-items:center;
+  }
+  .timeline-list li h4{margin:6px 0 6px;font-size:18px;font-weight:600}
+  .timeline-list li p{color:var(--muted);margin:0;font-size:14.5px}
+  .timeline-aside{
+    position:sticky;top:100px;
+    padding:36px;
+    background:var(--panel);
+    border:1px solid var(--line);border-radius:16px;
+  }
+  .timeline-aside .big-num{
+    font-family:Georgia,serif;font-size:80px;color:var(--amber);
+    line-height:1;margin-bottom:12px;
+  }
+  .timeline-aside p{color:var(--ink);margin:0 0 12px;font-size:15px}
+  .timeline-aside small{color:var(--muted);font-size:12px;letter-spacing:.5px;text-transform:uppercase}
+
+  /* CHATBOT */
+  .highlight{
+    display:grid;grid-template-columns:1fr 1.05fr;gap:70px;align-items:center;
+  }
+  .highlight h2{font-family:Georgia,serif;font-size:38px;margin:14px 0 18px;letter-spacing:-.5px;font-weight:400;line-height:1.15}
+  .highlight h2 em{color:var(--amber);font-style:italic}
+  .highlight > div > p{color:var(--ink);margin:0 0 22px;font-size:16px}
+  .check-list{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:14px}
+  .check-list li{padding-left:28px;position:relative;color:var(--ink);font-size:15px}
+  .check-list li::before{
+    content:"";position:absolute;left:0;top:9px;
+    width:14px;height:1px;background:var(--amber);
+  }
+  .chat{background:var(--panel);border:1px solid var(--line-2);border-radius:16px;padding:22px;display:flex;flex-direction:column;gap:10px;box-shadow:0 30px 60px -20px rgba(0,0,0,.5)}
+  .msg{max-width:82%;padding:11px 15px;border-radius:16px;font-size:14px;line-height:1.5}
+  .msg.user{align-self:flex-end;background:var(--amber);color:#0e0d0b;border-bottom-right-radius:4px}
+  .msg.bot{align-self:flex-start;background:var(--panel-2);border:1px solid var(--line);border-bottom-left-radius:4px}
+  .chat-meta{color:var(--muted);font-size:11px;text-align:center;margin-top:8px;padding-top:12px;border-top:1px solid var(--line);letter-spacing:.5px;text-transform:uppercase}
+
+  /* CTA */
+  .cta-band{
+    background:var(--panel);
+    border-top:1px solid var(--line);
+    padding:88px 0;
+    text-align:center;
+    position:relative;overflow:hidden;
+  }
+  .cta-band::before{
+    content:"";position:absolute;inset:0;
+    background:radial-gradient(600px 300px at 50% 100%, rgba(232,160,74,.10), transparent 60%);
+    pointer-events:none;
+  }
+  .cta-band > *{position:relative}
+  .cta-band h2{font-family:Georgia,serif;font-size:clamp(32px,4.5vw,52px);margin:0 0 14px;letter-spacing:-.8px;font-weight:400}
+  .cta-band h2 em{color:var(--amber);font-style:italic}
+  .cta-band p{color:var(--ink);font-size:17px;margin:0 0 32px}
+
+  /* FOOTER */
+  footer{border-top:1px solid var(--line);padding:36px 0;color:var(--muted);font-size:13px}
+  .foot-inner{display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px}
+
+  /* RESPONSIVE */
+  @media (max-width: 960px){
+    nav ul{display:none}
+    .hero-grid{grid-template-columns:1fr;gap:60px}
+    .hero-visual{max-width:460px}
+    .bento{grid-template-columns:1fr 1fr}
+    .card.big, .card.small{grid-column:span 1}
+    .timeline{grid-template-columns:1fr;gap:40px}
+    .timeline-aside{position:static}
+    .highlight{grid-template-columns:1fr;gap:44px}
+  }
+  @media (max-width: 560px){
+    .bento{grid-template-columns:1fr}
+    .kpi-row{grid-template-columns:1fr 1fr}
+    .trust{gap:24px}
+    section.padded{padding:70px 0}
+    .hero{padding:60px 0 40px}
+  }
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="container nav-inner">
+    <a href="#top" class="logo">
+      <div class="logo-mark">C</div>
+      <span>CRM Auto</span>
+    </a>
+    <nav>
+      <ul>
+        <li><a href="#features">Funcionalidades</a></li>
+        <li><a href="#how">Cómo funciona</a></li>
+        <li><a href="#chatbot">Chatbot IA</a></li>
+        <li><a href="#cta">Contacto</a></li>
+      </ul>
+    </nav>
+    <a class="btn btn-primary" href="#cta">Probar gratis</a>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero" id="top">
+  <div class="container hero-grid">
+    <div>
+      <span class="eyebrow">CRM para concesionarios</span>
+      <h1>Vendé más autos, <em>sin perder</em> un solo lead.</h1>
+      <p class="lede">
+        Gestionás <strong>leads, stock y clientes</strong> desde un mismo lugar.
+        Con chatbot de IA conectado a Meta que atiende 24/7 y cotizador de usados integrado
+        para cerrar operaciones sin fricción.
+      </p>
+      <div class="cta-row">
+        <a class="btn btn-primary" href="#cta">Solicitar demo →</a>
+        <a class="btn btn-ghost" href="#features">Ver funcionalidades</a>
+      </div>
+      <div class="trust">
+        <div><b>14 días</b>prueba sin tarjeta</div>
+        <div><b>24/7</b>atención automática</div>
+        <div><b>+300</b>concesionarias confían</div>
+      </div>
+    </div>
+
+    <div class="hero-visual">
+      <div class="mock" aria-hidden="true">
+        <div class="mock-header">
+          <i></i><i></i><i></i>
+          <span class="mock-title">panel.crmauto.com/leads</span>
+        </div>
+        <div class="kpi-row">
+          <div class="kpi"><div class="label">Leads hoy</div><div class="value">47</div><div class="delta">↑ 22%</div></div>
+          <div class="kpi"><div class="label">Stock</div><div class="value">128</div><div class="delta">+3 nuevos</div></div>
+          <div class="kpi"><div class="label">Cierres</div><div class="value">09</div><div class="delta">↑ 40%</div></div>
+        </div>
+        <div class="lead-list">
+          <div class="lead">
+            <div class="who"><div class="avatar a3">MG</div><div><div>Martín G.</div><div style="color:var(--muted);font-size:11px">Golf GTI 2022</div></div></div>
+            <span class="pill hot">Caliente</span>
+          </div>
+          <div class="lead">
+            <div class="who"><div class="avatar a2">LR</div><div><div>Lucía R.</div><div style="color:var(--muted);font-size:11px">Cotizó Fiat Palio</div></div></div>
+            <span class="pill new">Nuevo</span>
+          </div>
+          <div class="lead">
+            <div class="who"><div class="avatar a1">JC</div><div><div>Juan C.</div><div style="color:var(--muted);font-size:11px">Vía Instagram</div></div></div>
+            <span class="pill ai">Bot IA</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section id="features" class="padded">
+  <div class="container">
+    <div class="section-head">
+      <span class="eyebrow">Lo que hace</span>
+      <h2>Todo lo que tu concesionaria <em>necesita</em>, sin planillas ni cabos sueltos.</h2>
+    </div>
+
+    <div class="bento">
+      <div class="card big feature-primary">
+        <div class="icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>
+        </div>
+        <h3>Chatbot con IA, 24/7</h3>
+        <p>Conectado a Instagram y Facebook de Meta. Recibe leads, responde consultas sobre modelos, precios y financiación, y agenda visitas cuando el cliente está listo. Todos los días, a toda hora.</p>
+      </div>
+
+      <div class="card big">
+        <div class="icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 12h3l3-9 6 18 3-9h3"/></svg>
+        </div>
+        <h3>Cotizador de usados integrado</h3>
+        <p>El cliente entrega su auto en parte de pago y ve el valor al instante. Menos fricción en la decisión, más operaciones cerradas.</p>
+      </div>
+
+      <div class="card small">
+        <div class="icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+        </div>
+        <h3>Leads en tiempo real</h3>
+        <p>Capturá y actualizá cada oportunidad automáticamente. Nada se pierde.</p>
+      </div>
+
+      <div class="card small">
+        <div class="icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 7h18M3 12h18M3 17h18"/></svg>
+        </div>
+        <h3>Stock compartido</h3>
+        <p>Todos ven qué autos están disponibles, reservados o vendidos.</p>
+      </div>
+
+      <div class="card small">
+        <div class="icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="9" cy="8" r="4"/><path d="M2 21c0-4 3-7 7-7s7 3 7 7M17 11a3 3 0 100-6M22 21c0-3-2-5-5-5"/></svg>
+        </div>
+        <h3>Clientes organizados</h3>
+        <p>Historial completo: qué miró, qué cotizó, qué compró. En un click.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section id="how" class="how padded">
+  <div class="container">
+    <div class="section-head">
+      <span class="eyebrow">Cómo funciona</span>
+      <h2>De la primera consulta a la <em>entrega de llaves</em>.</h2>
+    </div>
+
+    <div class="timeline">
+      <ol class="timeline-list">
+        <li>
+          <span class="num">01</span>
+          <h4>Llega el lead</h4>
+          <p>Desde Meta Ads, Instagram, Facebook o formulario web. Todo entra al CRM automáticamente y queda asignado.</p>
+        </li>
+        <li>
+          <span class="num">02</span>
+          <h4>La IA lo atiende</h4>
+          <p>El chatbot conversa, responde dudas técnicas, califica al cliente y agenda visita o llamada.</p>
+        </li>
+        <li>
+          <span class="num">03</span>
+          <h4>Se cotiza el usado</h4>
+          <p>Si el cliente tiene un auto para entregar, el cotizador integra el valor de descuento al momento.</p>
+        </li>
+        <li>
+          <span class="num">04</span>
+          <h4>El vendedor cierra</h4>
+          <p>Recibe al lead con todo el contexto: historial, cotización y preferencias. Solo cierra la operación.</p>
+        </li>
+      </ol>
+
+      <aside class="timeline-aside">
+        <div class="big-num">3x</div>
+        <p>Más leads convertidos en visitas efectivas al concesionario, comparado con seguimiento manual por WhatsApp o mail.</p>
+        <small>Dato interno — clientes activos 2025</small>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<!-- CHATBOT HIGHLIGHT -->
+<section id="chatbot" class="padded">
+  <div class="container">
+    <div class="highlight">
+      <div>
+        <span class="eyebrow">Chatbot IA</span>
+        <h2>Un vendedor que <em>nunca</em> se toma vacaciones.</h2>
+        <p>Está conectado a las redes de Meta de tu concesionaria y responde por vos cuando el equipo no está. Sabe de modelos, precios, financiación y stock actualizado.</p>
+        <ul class="check-list">
+          <li>Integración directa con Instagram y Facebook</li>
+          <li>Entiende consultas sobre financiación y planes</li>
+          <li>Deriva al vendedor humano cuando el lead está listo</li>
+          <li>Aprende del catálogo y del stock actualizado</li>
+        </ul>
+      </div>
+      <div class="chat">
+        <div class="msg user">Hola, ¿tienen Golf GTI 2022 en stock?</div>
+        <div class="msg bot">¡Hola! Sí, tenemos 2 unidades: una negra con 45.000 km y una blanca con 38.000 km. ¿Te paso precios y opciones de financiación?</div>
+        <div class="msg user">Sí. Y si entrego mi Palio 2018 en parte de pago?</div>
+        <div class="msg bot">¡Genial! Puedo cotizarte tu Palio ahora mismo. ¿Me pasás la patente o los km actuales?</div>
+        <div class="chat-meta">Respuesta automática · 2 seg</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section id="cta" class="cta-band">
+  <div class="container">
+    <h2>Empezá a vender más <em>este mes</em>.</h2>
+    <p>Probá CRM Auto gratis por 14 días. Sin tarjeta, sin compromiso.</p>
+    <div class="cta-row" style="justify-content:center">
+      <a class="btn btn-primary" href="#">Solicitar demo</a>
+      <a class="btn btn-ghost" href="#">Hablar con ventas</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container foot-inner">
+    <div>© 2026 CRM Auto</div>
+    <div>Hecho para concesionarios que quieren vender más.</div>
+  </div>
+</footer>
+
+</body>
+</html>
